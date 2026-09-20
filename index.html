@@ -634,6 +634,7 @@ p{
 
 .hero__meta p{
   width:100%;
+  max-width:none;
 
   margin:0 0 .3em;
 
@@ -996,31 +997,21 @@ p{
   opacity:.6;
 }
 
-.buddha{
+.artwork-placeholder{
   width:min(132px,34vw);
 
+  max-width:200px;
+
   margin:0 auto;
-
-  color:var(--terracotta);
-
-  opacity:.5;
 }
 
-.buddha svg{
+.artwork-placeholder img{
+  display:block;
+
   width:100%;
-}
+  height:auto;
 
-.buddha path,
-.buddha circle{
-  fill:none;
-
-  stroke:currentColor;
-
-  stroke-width:1;
-
-  vector-effect:non-scaling-stroke;
-
-  stroke-linecap:round;
+  object-fit:contain;
 }
 
 
@@ -1428,6 +1419,10 @@ fieldset{
     clamp(40px,7vh,64px);
 
   text-align:center;
+}
+
+.footer p{
+  max-width:none;
 }
 
 .footer__sign{
@@ -2566,49 +2561,16 @@ fieldset{
   <div class="shell">
 
 
+    <!-- Replace wedding-line-art.png with your own transparent PNG/SVG -->
     <div
-      class="buddha"
+      class="artwork-placeholder"
       aria-hidden="true"
     >
 
-      <svg
-        viewBox="0 0 120 116"
-        role="presentation"
-      >
-
-        <path d="M60 10 C56 12 57 16 60 18 C63 16 64 12 60 10 M60 18 V21"/>
-
-        <path d="M60 21 C68 21 73 28 73 36 C73 45 67 50 60 50 C53 50 47 45 47 36 C47 28 52 21 60 21"/>
-
-        <path d="M47 32 C43 33 43 41 47 42 M73 32 C77 33 77 41 73 42"/>
-
-        <path d="M52 51 C43 56 38 66 37 78 M68 51 C77 56 82 66 83 78"/>
-
-        <path d="M37 78 C46 85 74 85 83 78"/>
-
-        <path d="M45 62 C40 55 41 47 46 44"/>
-
-        <path d="M46 44 C41 41 43 34 47 34 C51 34 53 39 50 45 C48 48 47 46 46 44"/>
-
-        <path d="M47 37 V44"/>
-
-        <path d="M55 74 C59 70 67 70 71 74"/>
-
-        <path d="M60 100 C50 100 42 94 42 87 C50 87 58 92 60 100"/>
-
-        <path d="M60 100 C70 100 78 94 78 87 C70 87 62 92 60 100"/>
-
-        <path d="M60 100 C45 102 29 98 23 89 C36 87 53 92 60 100"/>
-
-        <path d="M60 100 C75 102 91 98 97 89 C84 87 67 92 60 100"/>
-
-        <path d="M51 100 C54 106 66 106 69 100"/>
-
-        <path d="M0 94 C8 90 16 96 24 93" opacity=".55"/>
-
-        <path d="M96 93 C104 96 112 90 120 94" opacity=".55"/>
-
-      </svg>
+      <img
+        src="images/wedding-line-art.png"
+        alt=""
+      />
 
     </div>
 
