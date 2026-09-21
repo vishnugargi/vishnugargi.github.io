@@ -6,7 +6,7 @@
 
 <title>Gargi &amp; Vishnu — 22 November 2026, Poovar, Keralam</title>
 <meta name="description" content="Gargi and Vishnu invite you to their wedding on 22 November 2026 at Isola Di Cocco, Poovar, Thiruvananthapuram, Keralam." />
-<meta name="theme-color" content="#FDFBF7" />
+<meta name="theme-color" content="#3E2A2A" />
 
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Gargi &amp; Vishnu — 22 November 2026" />
@@ -35,6 +35,13 @@
   --green:#66745E;
   --rule:#E2D8C9;
 
+  /* Hero dark background – deep warm plum-brown */
+  --hero-bg:#3E2A2A;
+  --hero-glow:rgba(220,180,130,0.18);
+  --hero-glow-2:rgba(180,120,100,0.10);
+  --hero-text-light:#F5EDE4;
+  --hero-text-soft:rgba(245,237,228,0.75);
+
   --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
   --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
 
@@ -48,18 +55,19 @@
      WEDDING CUSTOMISATION
      ============================================================ */
 
-  /* PETAL COLOUR */
-  --petal-color:#B79A67;
-  --petal-opacity:.55;
-  --petal-count:16;
+  /* PETAL COLOURS – muted dusty pink / soft rose / restrained warm red */
+  --petal-color-1:#C98282;
+  --petal-color-2:#A95F62;
+  --petal-color-3:#D5A0A0;
+  --petal-opacity:.5;
 
-  /* NAME GOLD EFFECT */
-  --name-gold-1:#B79A67;
-  --name-gold-2:#D6B86A;
-  --name-gold-3:#A98245;
+  /* NAME GOLD EFFECT – deeper and brighter warm golds */
+  --name-gold-1:#8F6834;
+  --name-gold-2:#B08A4A;
+  --name-gold-3:#D0AE68;
 
   /* MUSIC BUTTON */
-  --music-bg:#FDFBF7;
+  --music-bg:rgba(253,251,247,0.85);
   --music-text:#2F2A26;
   --music-border:#E2D8C9;
 }
@@ -383,11 +391,6 @@ p{
     margin-right:0;
   }
 
-  /*
-     IMPORTANT:
-     The nav element itself must not occupy layout space.
-     The actual menu is positioned below the header.
-  */
   .nav__inner > nav{
     position:static;
     width:0;
@@ -448,7 +451,7 @@ p{
 
 
 /* ============================================================
-   HERO
+   HERO — DARKER ELEGANT BACKGROUND
    ============================================================ */
 
 .hero{
@@ -471,12 +474,16 @@ p{
     clamp(72px,10vh,96px);
 
   overflow:hidden;
+
+  background:var(--hero-bg);
+  color:var(--hero-text-light);
 }
 
+/* Subtle warm atmospheric glow for dark hero */
 .hero__glow{
   position:absolute;
   left:50%;
-  top:38%;
+  top:35%;
 
   transform:translate(-50%,-50%);
 
@@ -488,8 +495,9 @@ p{
   background:
     radial-gradient(
       circle,
-      rgba(245,239,229,.95) 0%,
-      rgba(253,251,247,0) 62%
+      var(--hero-glow) 0%,
+      var(--hero-glow-2) 40%,
+      transparent 70%
     );
 }
 
@@ -516,7 +524,7 @@ p{
   letter-spacing:.42em;
   text-transform:uppercase;
 
-  color:var(--ink-soft);
+  color:var(--hero-text-soft);
 
   margin:
     0
@@ -530,7 +538,7 @@ p{
   width:100%;
 
   font-family:var(--serif);
-  font-weight:300;
+  font-weight:400; /* slightly bolder */
 
   font-size:clamp(3.3rem,15vw,7.4rem);
   line-height:.98;
@@ -559,7 +567,7 @@ p{
   text-align:center;
 }
 
-/* NAME GOLD EFFECT — applies only to "Gargi" and "Vishnu" */
+/* NAME GOLD EFFECT — robust with fallback colour */
 .name-gold{
   background-image:linear-gradient(
     120deg,
@@ -572,7 +580,7 @@ p{
   background-size:300% 100%;
   -webkit-background-clip:text;
   background-clip:text;
-  color:transparent;
+  color:var(--name-gold-1); /* fallback for Safari */
   -webkit-text-fill-color:transparent;
   animation:name-breathe 7s ease-in-out infinite;
 }
@@ -620,7 +628,7 @@ p{
 }
 
 .horizon .w1{
-  stroke:var(--rule);
+  stroke:rgba(245,237,228,0.25);
 }
 
 .horizon .w2{
@@ -653,7 +661,7 @@ p{
 
 
 /* ============================================================
-   HERO PETALS — clipped to .hero (which already has overflow:hidden)
+   HERO PETALS — JavaScript-driven for Safari compatibility
    ============================================================ */
 
 .hero__petals{
@@ -670,57 +678,25 @@ p{
 .petal{
   position:absolute;
   top:0;
-  left:var(--x, 50%);
+  left:0;
 
-  width:calc(10px * var(--size, 1));
-  height:calc(14px * var(--size, 1));
-
-  background:var(--petal-color);
+  width:14px;
+  height:18px;
 
   border-radius:20% 80% 60% 40% / 60% 30% 70% 40%;
 
   opacity:0;
 
-  transform:translate(0,-10vh) rotate(var(--rot, 0deg));
-
-  animation:petal-fall var(--dur, 15s) linear var(--delay, 0s) infinite;
-
   will-change:transform,opacity;
+
+  pointer-events:none;
 }
 
-@keyframes petal-fall{
-  0%{
-    transform:translate(0,-10vh) rotate(var(--rot, 0deg));
-    opacity:0;
-  }
-
-  10%{
-    opacity:var(--petal-opacity);
-  }
-
-  50%{
-    transform:translate(var(--drift, 40px),55vh) rotate(calc(var(--rot, 0deg) + 130deg));
-  }
-
-  78%{
-    opacity:calc(var(--petal-opacity) * .6);
-  }
-
-  100%{
-    transform:translate(calc(var(--drift, 40px) * -0.6),108vh) rotate(calc(var(--rot, 0deg) + 240deg));
-    opacity:0;
-  }
-}
-
+/* Reduced motion: show static petals, no animation */
 @media (prefers-reduced-motion:reduce){
   .petal{
-    animation:none;
-
-    top:var(--y, 20%);
-
-    transform:none;
-
-    opacity:calc(var(--petal-opacity) * .7);
+    animation:none !important;
+    opacity:0.35;
   }
 }
 
@@ -734,7 +710,7 @@ p{
 
   font-size:clamp(.92rem,2.6vw,1.05rem);
 
-  color:var(--ink-soft);
+  color:var(--hero-text-soft);
 
   text-align:center;
 }
@@ -746,7 +722,7 @@ p{
 
   font-size:clamp(1.35rem,4.6vw,1.8rem);
 
-  color:var(--ink);
+  color:var(--hero-text-light);
 
   letter-spacing:.06em;
 
@@ -765,7 +741,7 @@ p{
 }
 
 .hero__venue{
-  color:var(--ink);
+  color:var(--hero-text-light);
 }
 
 
@@ -793,7 +769,7 @@ p{
   letter-spacing:.3em;
   text-transform:uppercase;
 
-  color:var(--ink-soft);
+  color:var(--hero-text-soft);
 }
 
 .scroll-cue i{
@@ -804,7 +780,7 @@ p{
 
   background:
     linear-gradient(
-      var(--rule),
+      rgba(245,237,228,0.25),
       transparent
     );
 }
@@ -1070,7 +1046,7 @@ p{
 
 
 /* ============================================================
-   MANDAPAM + BUDDHA
+   MANDAPAM — image placeholder (transparent PNG/SVG)
    ============================================================ */
 
 .mandapam{
@@ -1080,44 +1056,14 @@ p{
     0
     auto
     clamp(26px,5vh,38px);
-
-  color:var(--ink-soft);
 }
 
-.mandapam svg{
-  width:100%;
-}
-
-.mandapam path,
-.mandapam line,
-.mandapam circle{
-  fill:none;
-
-  stroke-width:1;
-
-  vector-effect:non-scaling-stroke;
-
-  stroke-linecap:round;
-}
-
-.mandapam .frame{
-  stroke:currentColor;
-  opacity:.75;
-}
-
-.mandapam .palm{
-  stroke:var(--green);
-  opacity:.5;
-}
-
-.mandapam .water{
-  stroke:var(--gold);
-  opacity:.45;
-}
-
-.mandapam .bloom{
-  stroke:var(--terracotta);
-  opacity:.6;
+.mandapam__image{
+  width:min(420px,82vw);
+  height:auto;
+  margin-inline:auto;
+  object-fit:contain;
+  display:block;
 }
 
 .artwork-placeholder{
@@ -1572,7 +1518,7 @@ fieldset{
 
 
 /* ============================================================
-   MUSIC TOGGLE
+   MUSIC TOGGLE — round symbol-only button
    ============================================================ */
 
 .music-toggle{
@@ -1582,67 +1528,72 @@ fieldset{
 
   z-index:60;
 
-  display:inline-flex;
+  display:flex;
   align-items:center;
-  gap:8px;
+  justify-content:center;
 
-  min-height:40px;
-  padding:10px 16px;
+  width:44px;
+  height:44px;
+
+  padding:0;
 
   background:var(--music-bg);
   color:var(--music-text);
   border:1px solid var(--music-border);
-  border-radius:999px;
+  border-radius:50%;
 
   font-family:var(--sans);
-  font-size:.72rem;
-  letter-spacing:.14em;
-  text-transform:uppercase;
+  font-size:1.1rem;
+  line-height:1;
 
   cursor:pointer;
 
-  box-shadow:0 6px 18px rgba(47,42,38,.08);
+  box-shadow:0 4px 14px rgba(47,42,38,.12);
 
   transition:
     border-color .3s var(--ease),
-    color .3s var(--ease);
+    color .3s var(--ease),
+    opacity .3s var(--ease),
+    transform .2s var(--ease);
+
+  -webkit-tap-highlight-color:transparent;
 }
 
 .music-toggle:hover,
 .music-toggle:focus-visible{
   border-color:var(--terracotta);
   color:var(--terracotta);
+  transform:scale(1.05);
 }
 
 .music-toggle__icon{
-  font-size:.95rem;
-  line-height:1;
-
-  opacity:.6;
-
+  display:block;
+  opacity:.5;
   transition:opacity .3s;
+  pointer-events:none;
 }
 
 .music-toggle[aria-pressed="true"] .music-toggle__icon{
   opacity:1;
+}
 
-  animation:music-pulse 1.8s ease-in-out infinite;
+.music-toggle[aria-pressed="true"]{
+  border-color:var(--terracotta);
+  opacity:1;
+}
+
+.music-toggle[aria-pressed="false"]{
+  opacity:.65;
+}
+
+/* Remove the old label span styles – no text shown */
+.music-toggle__label{
+  display:none !important;
 }
 
 @keyframes music-pulse{
   0%,100%{ opacity:.55; }
   50%{ opacity:1; }
-}
-
-@media (max-width:480px){
-  .music-toggle{
-    padding:9px 14px;
-    font-size:.66rem;
-  }
-
-  .music-toggle__label{
-    display:none;
-  }
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -1681,7 +1632,8 @@ fieldset{
   *,
   *::before,
   *::after{
-    animation:none !important;
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
 
     transition-duration:.01ms !important;
   }
@@ -1968,207 +1920,21 @@ fieldset{
   <div class="shell center reveal">
 
 
+    <!-- ============================================================
+         MANDAPAM LINE ART
+         Upload your transparent PNG/SVG to GitHub and use the filename
+         below.
+         ============================================================ -->
+
     <div
       class="mandapam"
       aria-hidden="true"
     >
-
-      <svg
-        viewBox="0 0 400 200"
-        role="presentation"
-      >
-
-        <path
-          class="bloom"
-          d="M112 48 q6 -8 12 0 q6 -8 12 0 q6 -8 12 0 q6 -8 12 0 q6 -8 12 0 q6 -8 12 0 q6 -8 12 0 q6 -8 12 0 q6 -8 12 0 q6 -8 12 0 q6 -8 12 0 q6 -8 12 0 q6 -8 12 0 q6 -8 12 0 q6 -8 12 0"
-        />
-
-        <path
-          class="frame"
-          d="M110 50 H290"
-        />
-
-        <path
-          class="frame"
-          d="M114 52 C150 74 250 74 286 52"
-        />
-
-        <path
-          class="frame"
-          d="M128 52 C154 66 168 68 178 60"
-          opacity=".35"
-        />
-
-        <path
-          class="frame"
-          d="M272 52 C246 66 232 68 222 60"
-          opacity=".35"
-        />
-
-        <path
-          class="bloom"
-          d="M146 65 V76 M176 70 V82 M200 71 V84 M224 70 V82 M254 65 V76"
-        />
-
-        <circle
-          class="bloom"
-          cx="146"
-          cy="79"
-          r="3"
-        />
-
-        <circle
-          class="bloom"
-          cx="176"
-          cy="85"
-          r="3"
-        />
-
-        <circle
-          class="bloom"
-          cx="200"
-          cy="87"
-          r="3"
-        />
-
-        <circle
-          class="bloom"
-          cx="224"
-          cy="85"
-          r="3"
-        />
-
-        <circle
-          class="bloom"
-          cx="254"
-          cy="79"
-          r="3"
-        />
-
-
-        <path
-          class="frame"
-          d="M112 54 H130 M120 54 V158 M110 158 H132"
-        />
-
-        <path
-          class="frame"
-          d="M270 54 H288 M280 54 V158 M268 158 H290"
-        />
-
-        <path
-          class="frame"
-          d="M120 68 V146"
-          opacity=".3"
-        />
-
-        <path
-          class="frame"
-          d="M280 68 V146"
-          opacity=".3"
-        />
-
-
-        <g class="urn">
-
-          <path
-            class="palm"
-            d="M70 132 C62 118 57 104 59 90 C68 100 73 116 70 132"
-          />
-
-          <path
-            class="palm"
-            d="M70 132 C78 118 83 104 81 90 C72 100 67 116 70 132"
-          />
-
-          <path
-            class="palm"
-            d="M68 132 C60 121 50 112 40 108 C49 118 60 126 68 133"
-            opacity=".38"
-          />
-
-          <path
-            class="palm"
-            d="M72 132 C80 121 90 112 100 108 C91 118 80 126 72 133"
-            opacity=".38"
-          />
-
-          <path
-            class="frame"
-            d="M58 134 C56 144 60 156 70 156 C80 156 84 144 82 134"
-          />
-
-          <path
-            class="frame"
-            d="M62 134 C66 131 74 131 78 134"
-          />
-
-          <path
-            class="frame"
-            d="M62 158 H78"
-          />
-
-        </g>
-
-
-        <g
-          class="urn"
-          transform="translate(260,0)"
-        >
-
-          <path
-            class="palm"
-            d="M70 132 C62 118 57 104 59 90 C68 100 73 116 70 132"
-          />
-
-          <path
-            class="palm"
-            d="M70 132 C78 118 83 104 81 90 C72 100 67 116 70 132"
-          />
-
-          <path
-            class="palm"
-            d="M68 132 C60 121 50 112 40 108 C49 118 60 126 68 133"
-            opacity=".38"
-          />
-
-          <path
-            class="palm"
-            d="M72 132 C80 121 90 112 100 108 C91 118 80 126 72 133"
-            opacity=".38"
-          />
-
-          <path
-            class="frame"
-            d="M58 134 C56 144 60 156 70 156 C80 156 84 144 82 134"
-          />
-
-          <path
-            class="frame"
-            d="M62 134 C66 131 74 131 78 134"
-          />
-
-          <path
-            class="frame"
-            d="M62 158 H78"
-          />
-
-        </g>
-
-
-        <path
-          class="water"
-          d="M8 172 C78 166 148 178 216 172 S340 166 392 173"
-        />
-
-        <path
-          class="water"
-          d="M48 186 C104 180 160 190 216 185 S322 180 360 186"
-          opacity=".35"
-        />
-
-      </svg>
-
+      <img
+        src="mandapam-lineart.png"
+        alt=""
+        class="mandapam__image"
+      />
     </div>
 
 
@@ -2953,7 +2719,6 @@ fieldset{
   aria-label="Toggle wedding music"
 >
   <span class="music-toggle__icon" aria-hidden="true">♫</span>
-  <span class="music-toggle__label">Music</span>
 </button>
 
 
@@ -2997,6 +2762,13 @@ const CONFIG = {
   RSVP_ENDPOINT:"RSVP_ENDPOINT_HERE"
 
 };
+
+
+/* ============================================================
+   PETAL CONFIGURATION — EDIT THIS NUMBER TO CONTROL PETALS
+   ============================================================ */
+
+const PETAL_COUNT = 18;
 
 
 /* ============================================================
@@ -3089,8 +2861,6 @@ const reduceMotion =
 
 /* ============================================================
    GOOGLE MAPS
-   Handles both the existing Venue button (data-maps-link) and the
-   new Reception button (data-maps-link="reception") from one place.
    ============================================================ */
 
 function wireMapsLinks(){
@@ -3135,11 +2905,11 @@ function wireMapsLinks(){
 
 
 /* ============================================================
-   PETALS
-   Generates --petal-count falling petals inside #heroPetals with
-   randomised size/rotation/opacity/drift/speed/start position, so
-   each one moves a little differently. Colour and opacity come
-   from --petal-color / --petal-opacity in the CSS variables above.
+   PETALS — Safari-compatible JavaScript animation
+   Uses requestAnimationFrame for cross-browser reliability.
+   Number controlled by PETAL_COUNT (config above).
+   Colours from CSS variables --petal-color-1/2/3.
+   Clipped to #heroPetals which is inside .hero (overflow:hidden).
    ============================================================ */
 
 (function heroPetals(){
@@ -3147,47 +2917,132 @@ function wireMapsLinks(){
   const container =
     document.getElementById("heroPetals");
 
-  if(!container)
-    return;
+  if(!container || reduceMotion) return;
 
-  const countRaw =
+  const rect = container.getBoundingClientRect();
+  let W = rect.width;
+  let H = rect.height;
+
+  const colors = [
     getComputedStyle(document.documentElement)
-      .getPropertyValue("--petal-count");
+      .getPropertyValue("--petal-color-1").trim() || "#C98282",
+    getComputedStyle(document.documentElement)
+      .getPropertyValue("--petal-color-2").trim() || "#A95F62",
+    getComputedStyle(document.documentElement)
+      .getPropertyValue("--petal-color-3").trim() || "#D5A0A0"
+  ];
 
-  const count =
-    parseInt(countRaw, 10) || 16;
+  const petals = [];
 
-  const frag =
-    document.createDocumentFragment();
+  /* Create PETAL_COUNT petal elements with randomised properties */
 
-  for(let i = 0; i < count; i++){
+  for(let i = 0; i < PETAL_COUNT; i++){
 
-    const petal =
-      document.createElement("span");
+    const el = document.createElement("span");
+    el.className = "petal";
 
-    petal.className = "petal";
+    const size = Math.random() * 8 + 8;          // 8–16 px
+    const w = size;
+    const h = size * 1.3;
 
-    const dur   = Math.random() * 8 + 11;        // 11s – 19s per fall
-    const delay = -(Math.random() * dur);        // negative delay staggers start
-    const size  = (Math.random() * 0.8 + 0.6).toFixed(2);
-    const rot   = Math.round(Math.random() * 80 - 40);
-    const drift = Math.round(Math.random() * 100 - 50);
-    const x     = (Math.random() * 90 + 5).toFixed(1);
-    const y     = (Math.random() * 55 + 10).toFixed(1); // used only in reduced-motion CSS
+    const baseOpacity = Math.random() * 0.3 + 0.25; // 0.25–0.55
 
-    petal.style.setProperty("--x", x + "%");
-    petal.style.setProperty("--y", y + "%");
-    petal.style.setProperty("--size", size);
-    petal.style.setProperty("--rot", rot + "deg");
-    petal.style.setProperty("--drift", drift + "px");
-    petal.style.setProperty("--dur", dur.toFixed(1) + "s");
-    petal.style.setProperty("--delay", delay.toFixed(1) + "s");
+    el.style.width  = w + "px";
+    el.style.height = h + "px";
+    el.style.background = colors[i % 3];
+    el.style.opacity = "0";
 
-    frag.appendChild(petal);
+    container.appendChild(el);
 
+    petals.push({
+      el,
+      x: Math.random() * W,
+      y: -h * 2 - Math.random() * 100,
+      speed: Math.random() * 0.6 + 0.25,        // 0.25–0.85 px per frame
+      drift: (Math.random() - 0.5) * 0.4,       // horizontal drift
+      rot: Math.random() * 360,
+      rotSpeed: (Math.random() - 0.5) * 0.8,
+      size: w,
+      baseOpacity,
+      phase: Math.random() * Math.PI * 2
+    });
   }
 
-  container.appendChild(frag);
+  let raf;
+
+  function animate(){
+
+    for(const p of petals){
+
+      p.y += p.speed;
+      p.x += p.drift + Math.sin(p.y * 0.015 + p.phase) * 0.3;
+      p.rot += p.rotSpeed;
+
+      /* Fade in near the top, fade out before the bottom (Countdown) */
+      let opacity;
+      if(p.y < 0){
+        opacity = 0;
+      }else if(p.y < H * 0.08){
+        opacity = p.baseOpacity * (p.y / (H * 0.08));
+      }else if(p.y > H * 0.82){
+        opacity = p.baseOpacity * Math.max(0, (H - p.y) / (H * 0.18));
+      }else{
+        opacity = p.baseOpacity;
+      }
+
+      /* Reset when fully off the bottom */
+      if(p.y > H + 50 || opacity <= 0 && p.y > H * 0.9){
+        p.y = -p.size * 2 - Math.random() * 80;
+        p.x = Math.random() * W;
+        opacity = 0;
+      }
+
+      p.el.style.transform =
+        `translate(${p.x}px, ${p.y}px) rotate(${p.rot}deg)`;
+      p.el.style.opacity = opacity;
+
+    }
+
+    raf = requestAnimationFrame(animate);
+  }
+
+  /* Size observer to update W/H on resize */
+
+  if(typeof ResizeObserver !== "undefined"){
+    new ResizeObserver(() => {
+      const r = container.getBoundingClientRect();
+      W = r.width;
+      H = r.height;
+    }).observe(container);
+  }else{
+    window.addEventListener("resize", () => {
+      const r = container.getBoundingClientRect();
+      W = r.width;
+      H = r.height;
+    });
+  }
+
+  /* Start when hero is in view, stop when out of view for performance */
+
+  if("IntersectionObserver" in window){
+
+    const heroEl = document.querySelector(".hero");
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          if(!raf) raf = requestAnimationFrame(animate);
+        }else{
+          if(raf){ cancelAnimationFrame(raf); raf = null; }
+        }
+      });
+    }, {threshold: 0.05});
+
+    io.observe(heroEl);
+
+  }else{
+    raf = requestAnimationFrame(animate);
+  }
 
 })();
 
@@ -3210,20 +3065,12 @@ function wireMapsLinks(){
   if(!audio || !btn)
     return;
 
-  const label =
-    btn.querySelector(".music-toggle__label");
-
   function setState(isPlaying){
 
     btn.setAttribute(
       "aria-pressed",
       String(isPlaying)
     );
-
-    if(label){
-      label.textContent =
-        isPlaying ? "Music On" : "Music";
-    }
 
   }
 
@@ -3260,8 +3107,6 @@ function wireMapsLinks(){
 
 /* ============================================================
    RECEPTION DETAILS
-   Populates the Reception section from CONFIG so the details only
-   need editing in one place.
    ============================================================ */
 
 (function reception(){
@@ -3978,4 +3823,3 @@ wireMapsLinks();
 
 </body>
 </html>
-
