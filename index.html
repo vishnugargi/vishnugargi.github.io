@@ -43,6 +43,25 @@
   --gutter:clamp(20px,6vw,64px);
   --section-y:clamp(72px,13vh,132px);
   --ease:cubic-bezier(.22,.61,.36,1);
+
+  /* ============================================================
+     WEDDING CUSTOMISATION
+     ============================================================ */
+
+  /* PETAL COLOUR */
+  --petal-color:#B79A67;
+  --petal-opacity:.55;
+  --petal-count:16;
+
+  /* NAME GOLD EFFECT */
+  --name-gold-1:#B79A67;
+  --name-gold-2:#D6B86A;
+  --name-gold-3:#A98245;
+
+  /* MUSIC BUTTON */
+  --music-bg:#FDFBF7;
+  --music-text:#2F2A26;
+  --music-border:#E2D8C9;
 }
 
 
@@ -540,6 +559,37 @@ p{
   text-align:center;
 }
 
+/* NAME GOLD EFFECT — applies only to "Gargi" and "Vishnu" */
+.name-gold{
+  background-image:linear-gradient(
+    120deg,
+    var(--name-gold-3),
+    var(--name-gold-1) 30%,
+    var(--name-gold-2) 50%,
+    var(--name-gold-1) 70%,
+    var(--name-gold-3)
+  );
+  background-size:300% 100%;
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  -webkit-text-fill-color:transparent;
+  animation:name-breathe 7s ease-in-out infinite;
+}
+
+@keyframes name-breathe{
+  0%{ background-position:0% 50%; }
+  50%{ background-position:100% 50%; }
+  100%{ background-position:0% 50%; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .name-gold{
+    animation:none;
+    background-position:50% 50%;
+  }
+}
+
 
 /* ============================================================
    HORIZON
@@ -598,6 +648,79 @@ p{
 
   to{
     transform:translateX(10px);
+  }
+}
+
+
+/* ============================================================
+   HERO PETALS — clipped to .hero (which already has overflow:hidden)
+   ============================================================ */
+
+.hero__petals{
+  position:absolute;
+  inset:0;
+
+  overflow:hidden;
+
+  pointer-events:none;
+
+  z-index:1;
+}
+
+.petal{
+  position:absolute;
+  top:0;
+  left:var(--x, 50%);
+
+  width:calc(10px * var(--size, 1));
+  height:calc(14px * var(--size, 1));
+
+  background:var(--petal-color);
+
+  border-radius:20% 80% 60% 40% / 60% 30% 70% 40%;
+
+  opacity:0;
+
+  transform:translate(0,-10vh) rotate(var(--rot, 0deg));
+
+  animation:petal-fall var(--dur, 15s) linear var(--delay, 0s) infinite;
+
+  will-change:transform,opacity;
+}
+
+@keyframes petal-fall{
+  0%{
+    transform:translate(0,-10vh) rotate(var(--rot, 0deg));
+    opacity:0;
+  }
+
+  10%{
+    opacity:var(--petal-opacity);
+  }
+
+  50%{
+    transform:translate(var(--drift, 40px),55vh) rotate(calc(var(--rot, 0deg) + 130deg));
+  }
+
+  78%{
+    opacity:calc(var(--petal-opacity) * .6);
+  }
+
+  100%{
+    transform:translate(calc(var(--drift, 40px) * -0.6),108vh) rotate(calc(var(--rot, 0deg) + 240deg));
+    opacity:0;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .petal{
+    animation:none;
+
+    top:var(--y, 20%);
+
+    transform:none;
+
+    opacity:calc(var(--petal-opacity) * .7);
   }
 }
 
@@ -1449,6 +1572,87 @@ fieldset{
 
 
 /* ============================================================
+   MUSIC TOGGLE
+   ============================================================ */
+
+.music-toggle{
+  position:fixed;
+  right:clamp(14px,3vw,28px);
+  bottom:clamp(14px,3vw,28px);
+
+  z-index:60;
+
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+
+  min-height:40px;
+  padding:10px 16px;
+
+  background:var(--music-bg);
+  color:var(--music-text);
+  border:1px solid var(--music-border);
+  border-radius:999px;
+
+  font-family:var(--sans);
+  font-size:.72rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+
+  cursor:pointer;
+
+  box-shadow:0 6px 18px rgba(47,42,38,.08);
+
+  transition:
+    border-color .3s var(--ease),
+    color .3s var(--ease);
+}
+
+.music-toggle:hover,
+.music-toggle:focus-visible{
+  border-color:var(--terracotta);
+  color:var(--terracotta);
+}
+
+.music-toggle__icon{
+  font-size:.95rem;
+  line-height:1;
+
+  opacity:.6;
+
+  transition:opacity .3s;
+}
+
+.music-toggle[aria-pressed="true"] .music-toggle__icon{
+  opacity:1;
+
+  animation:music-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes music-pulse{
+  0%,100%{ opacity:.55; }
+  50%{ opacity:1; }
+}
+
+@media (max-width:480px){
+  .music-toggle{
+    padding:9px 14px;
+    font-size:.66rem;
+  }
+
+  .music-toggle__label{
+    display:none;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .music-toggle[aria-pressed="true"] .music-toggle__icon{
+    animation:none;
+  }
+}
+
+
+/* ============================================================
    MOTION
    ============================================================ */
 
@@ -1548,6 +1752,10 @@ fieldset{
           <a href="#location">Venue</a>
         </li>
 
+        <li>
+          <a href="#reception">Reception</a>
+        </li>
+
       </ul>
 
     </nav>
@@ -1568,6 +1776,9 @@ fieldset{
 
   <div class="hero__glow" aria-hidden="true"></div>
 
+  <!-- Decorative falling petals, clipped to the Hero section only -->
+  <div class="hero__petals" id="heroPetals" aria-hidden="true"></div>
+
   <div class="hero__content">
 
     <p class="hero__label">
@@ -1576,7 +1787,7 @@ fieldset{
 
     <h1 class="names">
 
-      Gargi
+      <span class="name-gold">Gargi</span>
 
       <span
         class="amp"
@@ -1589,7 +1800,7 @@ fieldset{
         and
       </span>
 
-      Vishnu
+      <span class="name-gold">Vishnu</span>
 
     </h1>
 
@@ -2549,7 +2760,119 @@ fieldset{
 </section>
 
 
+<!-- ============================================================
+     RECEPTION
+     ============================================================ -->
+
+<section
+  class="section section--sand"
+  id="reception"
+  aria-labelledby="reception-title"
+>
+
+  <div class="shell reveal">
+
+    <div class="location">
+
+
+      <div
+        class="location__pin"
+        aria-hidden="true"
+      >
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.2"
+        >
+
+          <path
+            d="M12 22s7-7.1 7-12a7 7 0 1 0-14 0c0 4.9 7 12 7 12z"
+          />
+
+          <circle
+            cx="12"
+            cy="10"
+            r="2.4"
+          />
+
+        </svg>
+
+      </div>
+
+
+      <h2
+        class="section-title"
+        id="reception-title"
+      >
+        The Reception
+      </h2>
+
+
+      <p
+        class="day-card__date"
+        style="margin:22px 0 0"
+        id="receptionDate"
+      ></p>
+
+      <p
+        class="day-card__time"
+        style="margin:.5em 0 clamp(22px,4vw,30px)"
+        id="receptionTime"
+      ></p>
+
+      <p
+        class="day-card__venue"
+        style="margin:0 0 .3em"
+        id="receptionVenue"
+      ></p>
+
+
+      <p
+        style="color:var(--ink-soft);margin:0 auto clamp(28px,5vw,38px)"
+        id="receptionArea"
+      ></p>
+
+
+      <a
+        class="btn"
+        href="#"
+        data-maps-link="reception"
+        target="_blank"
+        rel="noopener"
+      >
+
+        Open in Google Maps
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+          aria-hidden="true"
+        >
+
+          <path d="M7 17 17 7M9 7h8v8"/>
+
+        </svg>
+
+      </a>
+
+
+      <div class="map-holder">
+        Map
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
 </main>
+
 
 
 <!-- ============================================================
@@ -2617,6 +2940,23 @@ fieldset{
 </footer>
 
 
+<!-- MUSIC FILE — REPLACE wedding-music.mp3 WITH YOUR OWN FILE -->
+<audio id="weddingMusic" loop preload="metadata">
+  <source src="wedding-music.mp3" type="audio/mpeg" />
+</audio>
+
+<button
+  class="music-toggle"
+  id="musicToggle"
+  type="button"
+  aria-pressed="false"
+  aria-label="Toggle wedding music"
+>
+  <span class="music-toggle__icon" aria-hidden="true">♫</span>
+  <span class="music-toggle__label">Music</span>
+</button>
+
+
 <script>
 
 /* ============================================================
@@ -2642,6 +2982,17 @@ const CONFIG = {
   weddingDayMessage:"Today, we marry.",
 
   MAPS_URL:"https://maps.app.goo.gl/18eui9E2VhmTAZh6A",
+
+  /* RECEPTION DETAILS — edit these five values once confirmed */
+  receptionDate:"[Reception Date]",
+
+  receptionTime:"[Reception Time]",
+
+  receptionVenue:"[Reception Venue]",
+
+  receptionArea:"[Reception Location]",
+
+  RECEPTION_MAPS_URL:"RECEPTION_GOOGLE_MAPS_URL_HERE",
 
   RSVP_ENDPOINT:"RSVP_ENDPOINT_HERE"
 
@@ -2726,6 +3077,10 @@ const mapsReady =
   CONFIG.MAPS_URL &&
   CONFIG.MAPS_URL !== "GOOGLE_MAPS_URL_HERE";
 
+const receptionMapsReady =
+  CONFIG.RECEPTION_MAPS_URL &&
+  CONFIG.RECEPTION_MAPS_URL !== "RECEPTION_GOOGLE_MAPS_URL_HERE";
+
 const reduceMotion =
   window.matchMedia(
     "(prefers-reduced-motion: reduce)"
@@ -2734,15 +3089,30 @@ const reduceMotion =
 
 /* ============================================================
    GOOGLE MAPS
+   Handles both the existing Venue button (data-maps-link) and the
+   new Reception button (data-maps-link="reception") from one place.
    ============================================================ */
 
 function wireMapsLinks(){
 
   $$("[data-maps-link]").forEach(el => {
 
-    if(mapsReady){
+    const isReception =
+      el.getAttribute("data-maps-link") === "reception";
 
-      el.href = CONFIG.MAPS_URL;
+    const url =
+      isReception
+      ? CONFIG.RECEPTION_MAPS_URL
+      : CONFIG.MAPS_URL;
+
+    const ready =
+      isReception
+      ? receptionMapsReady
+      : mapsReady;
+
+    if(ready){
+
+      el.href = url;
 
     }else{
 
@@ -2762,6 +3132,158 @@ function wireMapsLinks(){
   });
 
 }
+
+
+/* ============================================================
+   PETALS
+   Generates --petal-count falling petals inside #heroPetals with
+   randomised size/rotation/opacity/drift/speed/start position, so
+   each one moves a little differently. Colour and opacity come
+   from --petal-color / --petal-opacity in the CSS variables above.
+   ============================================================ */
+
+(function heroPetals(){
+
+  const container =
+    document.getElementById("heroPetals");
+
+  if(!container)
+    return;
+
+  const countRaw =
+    getComputedStyle(document.documentElement)
+      .getPropertyValue("--petal-count");
+
+  const count =
+    parseInt(countRaw, 10) || 16;
+
+  const frag =
+    document.createDocumentFragment();
+
+  for(let i = 0; i < count; i++){
+
+    const petal =
+      document.createElement("span");
+
+    petal.className = "petal";
+
+    const dur   = Math.random() * 8 + 11;        // 11s – 19s per fall
+    const delay = -(Math.random() * dur);        // negative delay staggers start
+    const size  = (Math.random() * 0.8 + 0.6).toFixed(2);
+    const rot   = Math.round(Math.random() * 80 - 40);
+    const drift = Math.round(Math.random() * 100 - 50);
+    const x     = (Math.random() * 90 + 5).toFixed(1);
+    const y     = (Math.random() * 55 + 10).toFixed(1); // used only in reduced-motion CSS
+
+    petal.style.setProperty("--x", x + "%");
+    petal.style.setProperty("--y", y + "%");
+    petal.style.setProperty("--size", size);
+    petal.style.setProperty("--rot", rot + "deg");
+    petal.style.setProperty("--drift", drift + "px");
+    petal.style.setProperty("--dur", dur.toFixed(1) + "s");
+    petal.style.setProperty("--delay", delay.toFixed(1) + "s");
+
+    frag.appendChild(petal);
+
+  }
+
+  container.appendChild(frag);
+
+})();
+
+
+/* ============================================================
+   MUSIC
+   Local audio file only — replace wedding-music.mp3 in the repo.
+   Autoplay is attempted but never forced; if the browser blocks
+   it, the button still toggles play/pause normally on click.
+   ============================================================ */
+
+(function music(){
+
+  const audio =
+    document.getElementById("weddingMusic");
+
+  const btn =
+    document.getElementById("musicToggle");
+
+  if(!audio || !btn)
+    return;
+
+  const label =
+    btn.querySelector(".music-toggle__label");
+
+  function setState(isPlaying){
+
+    btn.setAttribute(
+      "aria-pressed",
+      String(isPlaying)
+    );
+
+    if(label){
+      label.textContent =
+        isPlaying ? "Music On" : "Music";
+    }
+
+  }
+
+  const tryAutoplay = audio.play();
+
+  if(tryAutoplay && typeof tryAutoplay.then === "function"){
+
+    tryAutoplay
+      .then(() => setState(true))
+      .catch(() => setState(false));
+
+  }
+
+  btn.addEventListener("click", () => {
+
+    if(audio.paused){
+
+      audio.play()
+        .then(() => setState(true))
+        .catch(() => setState(false));
+
+    }else{
+
+      audio.pause();
+
+      setState(false);
+
+    }
+
+  });
+
+})();
+
+
+/* ============================================================
+   RECEPTION DETAILS
+   Populates the Reception section from CONFIG so the details only
+   need editing in one place.
+   ============================================================ */
+
+(function reception(){
+
+  const fields = {
+    receptionDate:   CONFIG.receptionDate,
+    receptionTime:   CONFIG.receptionTime,
+    receptionVenue:  CONFIG.receptionVenue,
+    receptionArea:   CONFIG.receptionArea
+  };
+
+  Object.keys(fields).forEach(id => {
+
+    const el =
+      document.getElementById(id);
+
+    if(el)
+      el.textContent = fields[id];
+
+  });
+
+})();
 
 
 /* ============================================================
@@ -3456,3 +3978,4 @@ wireMapsLinks();
 
 </body>
 </html>
+
